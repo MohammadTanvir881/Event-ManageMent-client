@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Calendar, Clock, MapPin } from "lucide-react";
+import Image from "next/image";
 
 const events = [
   {
@@ -44,25 +45,25 @@ const events = [
 
 export function UpcomingEvents() {
   return (
-    <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+    <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-slate-900">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 sm:mb-16">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-2">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2 text-white">
               Upcoming <span className="text-indigo-400">Events</span>
             </h2>
-            <p className="text-slate-400">
-              Don't miss these exciting gatherings
+            <p className="text-slate-300">
+              Discover the latest gatherings in your community
             </p>
           </div>
           <Button
             variant="outline"
-            className="mt-4 md:mt-0 border-slate-600 hover:bg-slate-800"
+            className="mt-4 md:mt-0 bg-indigo-600 border-none text-white hover:bg-indigo-800 hover:text-white transition-colors"
           >
             View All Events
           </Button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {events.map((event) => (
             <EventCard key={event.id} event={event} />
           ))}
@@ -71,5 +72,3 @@ export function UpcomingEvents() {
     </section>
   );
 }
-
-

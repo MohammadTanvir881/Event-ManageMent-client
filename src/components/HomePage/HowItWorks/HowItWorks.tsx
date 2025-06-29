@@ -10,7 +10,7 @@ export function HowItWorks() {
       <div className="max-w-7xl mx-auto">
         <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            How <span className="text-indigo-400">Eventify</span> Works
+            <span className="text-indigo-400"> How  Eventify Works</span>
           </h2>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             Simple steps to find or host your perfect event

@@ -4,7 +4,7 @@ export function CTASection() {
   return (
     <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-indigo-900/50 to-indigo-800/50">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+        <h2 className="text-3xl sm:text-4xl text-white font-bold mb-6">
           Ready to Transform Your Event Experience?
         </h2>
         <p className="text-lg text-slate-300 mb-8 max-w-2xl mx-auto">
@@ -17,7 +17,7 @@ export function CTASection() {
           </Button>
           <Button
             variant="outline"
-            className="px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg border-slate-300 hover:bg-slate-800 transition-colors"
+            className="px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg border-none hover:bg-slate-900 hover:text-white transition-colors"
           >
             Learn More
           </Button>
