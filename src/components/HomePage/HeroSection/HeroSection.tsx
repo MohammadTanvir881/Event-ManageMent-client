@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 py-16 gap-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <section className="relative min-h-[700px]  flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-20 py-16 gap-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-2xl mx-auto lg:mx-0 space-y-6 z-10 px-4 sm:px-0">
         <Badge
           variant="secondary"
