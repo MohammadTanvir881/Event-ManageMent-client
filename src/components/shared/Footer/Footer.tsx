@@ -33,7 +33,7 @@ export function Footer() {
                   strokeLinejoin="round"
                 />
               </svg>
-              <span className="text-xl font-semibold text-white">Eventify</span>
+              <span className="text-xl font-semibold text-white">EventPro</span>
             </div>
             <p className="text-sm">
               Connecting people through unforgettable experiences. Find, create, and share events that matter.

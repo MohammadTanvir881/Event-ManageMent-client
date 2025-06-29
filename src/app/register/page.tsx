@@ -10,17 +10,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { createUser } from "@/services/AuthServices";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/services/AuthServices";
 
 // Form schema validation
 const formSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  photoUrl: z.string().url("Please enter a valid URL").optional(),
 });
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -32,56 +34,33 @@ export default function LoginPage() {
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      photoUrl: "",
     },
   });
 
   const onSubmit = async (data: any) => {
-    console.log("Login data:", data);
+    console.log("Registration data:", data);
     try {
-      const res = await loginUser(data);
-      console.log(res);
+      const res = await createUser(data);
+      console.log("res", res);
       if (res.success) {
-        toast.success(res.message);
-        router.push("/");
-      } else {
-        toast.error(res.message);
+        toast.success("User created successfully");
+        router.push("/login");
+      } else if (res.error) {
+        toast.error(res.error);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.message);
     }
+    setIsLoading(true);
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Background Image with Gradient Overlay */}
-      <div className="hidden lg:block relative w-1/2">
-        <img
-          src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-          alt="Event management background"
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/50" />
-        <div className="absolute bottom-8 left-8 right-8 text-white">
-          <h1 className="text-4xl font-bold mb-2">EventPro</h1>
-          <p className="text-lg mb-6">
-            The ultimate platform for professional event management
-          </p>
-          <div className="flex items-center gap-2 text-sm">
-            <span>Don't have an account?</span>
-            <Link
-              href="/register"
-              className="font-semibold text-white hover:underline"
-            >
-              Get started
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Login Form */}
+    <div className="min-h-screen flex flex-col-reverse lg:flex-row">
+      {/* Login Form - Now on the LEFT side */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
@@ -108,14 +87,40 @@ export default function LoginPage() {
                 />
               </svg>
             </div>
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">Sign in</h2>
+            <h2 className="mt-6 text-3xl font-bold text-gray-900">
+              Create Account
+            </h2>
             <p className="mt-2 text-sm text-gray-600">
-              Access your event management dashboard
+              Join our event management platform
             </p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
             <div className="space-y-4">
+              {/* Name Field */}
+              <div>
+                <Label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Full Name
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  {...register("name")}
+                  className={`mt-1 w-full ${
+                    errors.name ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+
               {/* Email Field */}
               <div>
                 <Label
@@ -142,14 +147,12 @@ export default function LoginPage() {
 
               {/* Password Field */}
               <div>
-                <div className="flex items-center justify-between">
-                  <Label
-                    htmlFor="password"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Password
-                  </Label>
-                </div>
+                <Label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </Label>
                 <div className="relative mt-1">
                   <Input
                     id="password"
@@ -179,20 +182,28 @@ export default function LoginPage() {
                 )}
               </div>
 
-              {/* Remember Me Checkbox */}
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-700"
+              {/* Photo URL Field */}
+              <div>
+                <Label
+                  htmlFor="photoUrl"
+                  className="block text-sm font-medium text-gray-700"
                 >
-                  Remember me
-                </label>
+                  Profile Photo URL (Optional)
+                </Label>
+                <Input
+                  id="photoURL"
+                  type="url"
+                  placeholder="https://example.com/photo.jpg"
+                  {...register("photoUrl")}
+                  className={`mt-1 w-full ${
+                    errors.photoUrl ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.photoUrl && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.photoUrl.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -203,22 +214,37 @@ export default function LoginPage() {
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 disabled={isLoading}
               >
-                {isLoading ? "Signing in..." : "Sign in"}
+                {isLoading ? "Creating account..." : "Register"}
               </Button>
             </div>
           </form>
 
-          <div className="text-center text-sm text-gray-600 lg:hidden">
+          <div className="text-center text-sm text-gray-600">
             <p>
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Link
-                href="/register"
+                href="/login"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Sign up
+                Sign in
               </Link>
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Background Image with Gradient Overlay - Now on the RIGHT side */}
+      <div className="relative w-full lg:w-1/2 h-64 lg:h-auto">
+        <img
+          src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+          alt="Event registration background"
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/50" />
+        <div className="absolute bottom-8 left-8 right-8 text-white">
+          <h1 className="text-4xl font-bold mb-2">Join EventPro</h1>
+          <p className="text-lg">Start managing your events professionally</p>
         </div>
       </div>
     </div>
