@@ -6,13 +6,12 @@ import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Image from "next/image";
-import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/services/AuthServices";
+import Link from "next/link";
 
 // Form schema validation
 const formSchema = z.object({
@@ -29,6 +28,7 @@ export default function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,10 +38,9 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: any) => {
-    console.log("Login data:", data);
+    setIsLoading(true);
     try {
       const res = await loginUser(data);
-      console.log(res);
       if (res.success) {
         toast.success(res.message);
         router.push("/");
@@ -50,7 +49,16 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.log(error);
+      toast.error("An error occurred during login");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleDemoLogin = () => {
+    setValue("email", "tanvirrashid881@gmail.com");
+    setValue("password", "12345678");
+    toast.info("Demo credentials filled. Click Sign In to proceed.");
   };
 
   return (
@@ -197,13 +205,23 @@ export default function LoginPage() {
             </div>
 
             {/* Submit Button */}
-            <div>
+            <div className="space-y-3">
               <Button
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign in"}
+              </Button>
+
+              {/* Demo Login Button */}
+              <Button
+                type="button"
+                onClick={handleDemoLogin}
+                className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                variant="outline"
+              >
+                Use Demo Account
               </Button>
             </div>
           </form>

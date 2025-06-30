@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const events = [
   {
@@ -56,12 +57,15 @@ export function UpcomingEvents() {
               Discover the latest gatherings in your community
             </p>
           </div>
-          <Button
-            variant="outline"
-            className="mt-4 md:mt-0 bg-indigo-600 border-none text-white hover:bg-indigo-800 hover:text-white transition-colors"
-          >
-            View All Events
-          </Button>
+          <Link href="/events">
+            {" "}
+            <Button
+              variant="outline"
+              className="mt-4 md:mt-0 bg-indigo-600 border-none text-white hover:bg-indigo-800 hover:text-white transition-colors"
+            >
+              View All Events
+            </Button>
+          </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {events.map((event) => (

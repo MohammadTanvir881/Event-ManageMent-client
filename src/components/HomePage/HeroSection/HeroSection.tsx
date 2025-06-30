@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -22,16 +23,23 @@ export function HeroSection() {
           gathering. Everything you need for memorable experiences.
         </p>
         <div className="flex flex-wrap gap-4 mt-8">
-          <Button className="px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg bg-indigo-600 hover:bg-indigo-700 transition-colors">
-            Explore Events
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg border-slate-600 hover:bg-slate-800 transition-colors"
-          >
-            Create Event
-          </Button>
+          <Link href="/events">
+            {" "}
+            <Button className="px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg bg-indigo-600 hover:bg-indigo-700 transition-colors">
+              Explore Events
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+          <Link href="/add-event">
+            {" "}
+            <Button
+              variant="outline"
+              className="px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg border-slate-700 hover:border-indigo-500 hover:text-indigo-500 transition-colors"
+            >
+              Create Event
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
         <div className="flex items-center gap-2 mt-8 text-sm text-slate-400">
           <div className="flex -space-x-2">
@@ -54,7 +62,7 @@ export function HeroSection() {
       <div className="relative w-full max-w-2xl mx-auto lg:mx-0 z-10 mt-12 lg:mt-0">
         <div className="absolute -inset-4 bg-indigo-500/20 rounded-xl blur-2xl"></div>
         <img
-          src="https://i.ibb.co/pjvsMQX3/profile.jpg"
+          src="https://i.ibb.co/wNNF5TSZ/Untitled-design-23.jpg"
           alt="People at an event"
           width={800}
           height={500}

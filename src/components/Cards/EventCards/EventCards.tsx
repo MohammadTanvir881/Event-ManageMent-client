@@ -3,8 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export function EventCard({ event }: { event: any }) {
+  const hanldeWarning = () => {
+    toast.warning("This Event is coming soon!");
+  }
   return (
     <Card className="bg-slate-800 border-slate-700 hover:border-indigo-400/50 transition-all duration-300 hover:shadow-lg group overflow-hidden">
       {/* Image with gradient overlay */}
@@ -84,11 +88,12 @@ export function EventCard({ event }: { event: any }) {
           {event.category}
         </Badge>
         <Button
+          
           variant="outline"
           size="sm"
           className=" bg-indigo-600 border-none text-white hover:bg-indigo-800 hover:text-white transition-colors"
         >
-          View Details
+          Comming Soon
         </Button>
       </CardFooter>
     </Card>

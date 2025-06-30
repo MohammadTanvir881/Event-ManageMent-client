@@ -12,7 +12,7 @@ export const middleware = async (request: NextRequest) => {
     } else {
       return NextResponse.redirect(
         new URL(
-          `https://event-management-backend-three-murex.vercel.app/login`,
+          `https://event-management-ivory.vercel.app/login`,
           request.url
         )
       );
