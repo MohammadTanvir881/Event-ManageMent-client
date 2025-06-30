@@ -18,3 +18,20 @@ export const createEvent = async (userData: FieldValues) => {
     return Error(err);
   }
 };
+
+// get all events
+export const getAllEvents = async () => {
+  try {
+    const res = await fetch(`${process.env.BACKEND_URL}/event`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const result = await res.json();
+
+    return result;
+  } catch (err: any) {
+    return Error(err);
+  }
+}
