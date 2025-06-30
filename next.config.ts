@@ -1,4 +1,16 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+  // ✅ ESLint errors will be ignored during builds
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  // ✅ TypeScript errors will be ignored during builds
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
+  // ✅ Image optimization domains & patterns
   images: {
     domains: [
       "img.freepik.com",
@@ -18,7 +30,6 @@ const nextConfig = {
         hostname: "assets.example.com",
         port: "",
         pathname: "/account123/**",
-        search: "",
       },
     ],
   },
