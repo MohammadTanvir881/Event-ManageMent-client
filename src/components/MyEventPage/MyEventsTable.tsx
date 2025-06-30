@@ -15,18 +15,46 @@ import { format } from "date-fns";
 import { parseISO } from "date-fns/parseISO";
 import Link from "next/link";
 import { useUser } from "@/context/userContext";
+import { deleteEvent } from "@/services/EventServices";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 export default function MyEventsPageTable({ AllEvents }: { AllEvents: any[] }) {
-  const {user} = useUser();
+  const { user } = useUser();
   const userEmail = user?.userEmail;
-  console.log("User Email in MyEventsPageTable:", userEmail);
-  console.log("User in MyEventsPageTable:", user);
+  // console.log("User Email in MyEventsPageTable:", userEmail);
+  // console.log("User in MyEventsPageTable:", user);
 
-  const userEvents = AllEvents.filter((event) => event.authorEmail === userEmail);
-  console.log("Filtered User Events:", userEvents);
+  const userEvents = AllEvents.filter(
+    (event) => event.authorEmail === userEmail
+  );
+  // console.log("Filtered User Events:", userEvents);
 
-  const handleDelete = (eventId: string) => {
-    console.log(`Delete event with ID: ${eventId}`);
+  const handleDelete = async (eventId: string) => {
+    // console.log(`Delete event with ID: ${eventId}`);
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await deleteEvent(eventId);
+          if (res.success) {
+            toast.success("Event deleted successfully!");
+          }
+          // Swal.fire({
+          //   title: "Deleted!",
+          //   text: "Your file has been deleted.",
+          //   icon: "success",
+          // });
+        }
+      });
+    } catch (error) {}
   };
   return (
     <div className="min-h-screen bg-slate-900 py-8 px-4 sm:px-6 lg:px-8">
@@ -131,7 +159,10 @@ export default function MyEventsPageTable({ AllEvents }: { AllEvents: any[] }) {
                               Update
                             </button>
                           </Link>
-                          <button onClick={() => handleDelete(event._id)} className="text-sm text-red-400 hover:text-slate-300 px-2 py-1 rounded hover:bg-slate-700">
+                          <button
+                            onClick={() => handleDelete(event._id)}
+                            className="text-sm text-red-400 hover:text-slate-300 px-2 py-1 rounded hover:bg-slate-700"
+                          >
                             Delete
                           </button>
                         </div>

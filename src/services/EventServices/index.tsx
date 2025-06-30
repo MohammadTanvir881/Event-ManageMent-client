@@ -1,8 +1,7 @@
 "use server";
-import { FieldValues } from "react-hook-form";
+import { revalidateTag } from "next/cache";
 
-// create user
-export const createEvent = async (userData: FieldValues) => {
+export const createEvent = async (userData: any) => {
   try {
     const res = await fetch(`${process.env.BACKEND_URL}/events`, {
       method: "POST",
@@ -10,16 +9,17 @@ export const createEvent = async (userData: FieldValues) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
+      next: { tags: ['events'] } // Cache tag for invalidation
     });
     const result = await res.json();
 
+    revalidateTag('events'); // Revalidate events list
     return result;
   } catch (err: any) {
     return Error(err);
   }
 };
 
-// get all events
 export const getAllEvents = async () => {
   try {
     const res = await fetch(`${process.env.BACKEND_URL}/events`, {
@@ -27,6 +27,10 @@ export const getAllEvents = async () => {
       headers: {
         "Content-Type": "application/json",
       },
+      next: { 
+        tags: ['events'], // Cache tag
+        // revalidate: 60 // Revalidate every 60 seconds
+      }
     });
     const result = await res.json();
 
@@ -36,16 +40,19 @@ export const getAllEvents = async () => {
   }
 };
 
-// get single events
-export const getSigleEvents = async (enevtId: string) => {
+export const getSigleEvents = async (eventId: string) => {
   try {
     const res = await fetch(
-      `${process.env.BACKEND_URL}/events/${enevtId}`,
+      `${process.env.BACKEND_URL}/events/${eventId}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
+        next: { 
+          tags: [`events`], // Individual event tag
+          revalidate: 60 
+        }
       }
     );
     const result = await res.json();
@@ -56,8 +63,7 @@ export const getSigleEvents = async (enevtId: string) => {
   }
 };
 
-// update event
-export const updateEvent = async (eventId: string, userData: FieldValues) => {
+export const updateEvent = async (eventId: string, userData: any) => {
   try {
     const res = await fetch(`${process.env.BACKEND_URL}/events/${eventId}`, {
       method: "PATCH",
@@ -65,9 +71,34 @@ export const updateEvent = async (eventId: string, userData: FieldValues) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
+      next: { 
+        tags: ['events'] // Both collection and individual tags
+      }
     });
     const result = await res.json();
 
+    revalidateTag('events'); // Revalidate events list
+    return result;
+  } catch (err: any) {
+    return Error(err);
+  }
+};
+
+export const deleteEvent = async (eventId: string) => {
+  try {
+    const res = await fetch(`${process.env.BACKEND_URL}/events/${eventId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { 
+        tags: ['events'] 
+      }
+    });
+    const result = await res.json();
+
+    revalidateTag('events');
+    revalidateTag(`event-${eventId}`);
     return result;
   } catch (err: any) {
     return Error(err);
